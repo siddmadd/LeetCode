@@ -1,16 +1,52 @@
 class Solution {
 public:
-    string reverseWords(string s) {
-        string word;
-        stringstream a = stringstream(s);
-        vector<string> words;
-        while (a >> word) {
-            words.push_back(word);
+    int minFlips(int a, int b, int c) {
+        int max = std::max(a,b);
+        max = std::max(max,c);
+        int counter = 0;
+        while (max != 0) {
+            max >>= 1;
+            ++counter;
         }
-        string jinWoo = words[words.size()-1];
-        for (int i = words.size()-2; i >= 0; --i) {
-            jinWoo += " " + words[i];
+        vector aVec (counter, 0);
+        vector bVec (counter, 0);
+        vector cVec (counter, 0);
+        
+
+        bitCounter(a, aVec);
+        bitCounter(b, bVec);
+        bitCounter(c, cVec);
+        int count = 0;
+        
+        for (int i = 0; i < cVec.size(); ++i) {
+            if ((aVec[i] | bVec[i]) == cVec[i]) {
+                continue;
+            }
+            else if (cVec[i] == 1) {
+                count += 1;
+            }
+            else {
+                if (aVec[i] == 1 && bVec[i] == 1) {
+                    count += 2;
+                } else {
+                    count++;
+                }
+            }
         }
-        return jinWoo;
+        return count;
+    }
+    
+    void bitCounter (int num, vector<int> &bits) {
+        int index = 0;
+        while (num != 0) {
+            if ((num & 0b1) == 0b1) {
+                bits[index] = 1;
+            }
+            else {
+                bits[index] = 0;
+            }
+            num >>= 1;
+            ++index;
+        }
     }
 };
